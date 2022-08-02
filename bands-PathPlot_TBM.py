@@ -8,10 +8,10 @@ from matplotlib import pyplot as plt
 # Changes to be made only in this block
 ###############################################################################
 
-wdir = "/home/abhirup/Research_Stuffs/Data/Co3Sn2S2/"
-seedname = "wann"
+wdir = "./"
+seedname = "wannier90"
 
-fermi_level = 12.5437
+fermi_level = 9.2606
 ymin, ymax = -1, 1
 
 ###############################################################################

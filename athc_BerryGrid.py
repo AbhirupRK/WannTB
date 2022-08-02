@@ -8,10 +8,10 @@ from scipy.integrate import simps
 from scipy.ndimage import gaussian_filter1d
 from multiprocessing import Pool
 
-fermi_level = 12.5383    # eV
+fermi_level = 9.5659    # eV
 kB = 8.617333262e-5    # eV/K
-T = 10    # Kelvin
-fermi_min, fermi_max = fermi_level-0.8 , fermi_level+0.8
+T = 300    # Kelvin
+fermi_min, fermi_max = fermi_level-0.25 , fermi_level+0.25
 fermi_div = 101
 
 athc_const = 10**8 * const.k**2 * T / const.hbar
@@ -58,35 +58,35 @@ athc_xy = list(pool.map(calc_athc_xy, mu_list))
 pool.close() ; pool.join()
 
 athc_xy = np.vstack((mu_list, athc_xy)).T
-# np.savetxt(wdir+f'TBM_athc-xy.dat', athc_xy)
+np.savetxt(wdir+f'TBM_athc-xy.dat', athc_xy)
 
 # del datagrids, berry_grid, eigval_grid, mu_list
 print(f"Finished obtaining ATHC from Berry (Total time elapsed : {round(time.perf_counter() - t0, 1)} seconds)")
 
 #%% Plot ATHC from Berry
 
-# athc_xy = np.loadtxt(wdir+'TBM_athc-xy.dat')
+athc_xy = np.loadtxt(wdir+'TBM_athc-xy_T-50_nk-81.dat')
 athc_filt = athc_xy[:,1]
 # athc_filt = gaussian_filter1d(athc_xy[:,1].astype('float64'), 5)
 
 from matplotlib import pyplot as plt
 # %matplotlib auto
 plt.figure()
-plt.title("ATHC from Berry (TBM)", fontsize=15)
+# plt.title("ATHC from Berry (TBM)", fontsize=15)
 plt.axis(xmin=np.min(athc_xy[:,0]-fermi_level),xmax=np.max(athc_xy[:,0])-fermi_level)#, ymin=-0.0004, ymax=0.0005)
 # plt.yticks([-10,-5,0,5,10], [-10,-5,0,5,10])
 plt.locator_params(axis='x', nbins=9)
 plt.locator_params(axis='y', nbins=5)
 plt.axvline(0, color='grey', lw=1)
 plt.axhline(0, color='grey', lw=1)
-plt.plot(athc_xy[:,0]-fermi_level, -athc_filt, lw=1, color='blue')
+plt.plot(athc_xy[:,0]-fermi_level, -athc_filt*100, lw=2, color='blue')
 ax = plt.gca()
-plt.xlabel("Fermi energy (eV)", fontsize=13)
-plt.ylabel(r"$\kappa_{xy}$ (W/K-cm)", fontsize=13)
+plt.xlabel("Fermi energy (eV)", fontsize=15)
+plt.ylabel(r"$\kappa_{xy}$ (W/K-m)", fontsize=15)
 plt.setp(ax.spines.values(), linewidth=1)
-plt.tick_params(axis = 'both', direction = 'in', length = 5, width = 1, labelsize=12, bottom=1, top=1, left=1, right=1 )
+plt.tick_params(axis = 'both', direction = 'in', length = 5, width = 1, labelsize=14, bottom=1, top=1, left=1, right=1 )
 plt.tight_layout()
-# plt.savefig(wdir+"WB_athc-xy.pdf")
+plt.savefig(wdir+"WB_athc-xy.pdf")
 plt.show()
 
 #%% The end

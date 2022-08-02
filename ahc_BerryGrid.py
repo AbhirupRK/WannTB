@@ -7,7 +7,7 @@ from scipy.integrate import simps
 from scipy.ndimage import gaussian_filter1d
 from multiprocessing import Pool
 
-fermi_level = 12.5383
+fermi_level = 9.5659
 kB = 8.617333262e-5    # eV/K
 T = 10    # Kelvin
 fermi_min, fermi_max = fermi_level-0.8 , fermi_level+0.8
@@ -50,7 +50,7 @@ ahc_xy = list(pool.map(calc_ahc_xy, mu_list))
 pool.close() ; pool.join()
 
 ahc_xy = np.vstack((mu_list, ahc_xy)).T
-# np.savetxt(wdir+f'TBM_ahc-xy_nk-{nk1}.dat', ahc_xy)
+np.savetxt(wdir+f'TBM_ahc-xy_nk-{nk1}.dat', ahc_xy)
 
 # del datagrids, berry_grid, eigval_grid, mu_list
 print(f"Finished obtaining AHC from Berry (Total time elapsed : {round(time.perf_counter() - t0, 1)} seconds)")
